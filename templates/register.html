@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="form-box">
+                <form name="signup_form" action="/register/" method="post">
+    
+                    <h2>Register customer</h2>
+    
+                    <input type="text" placeholder="First name" name="first_name" class="field" required>
+                    
+                    <input type="text" placeholder="Last name" name="last_name" class="field" required>
+                    
+                    <input type="email" placeholder="Email" name="email" class="field" required>
+                    
+                    <input type="password" placeholder="Password" name="password" class="field" required>
+                    
+                    <input type="text" placeholder="Details" name="details" class="field">
+    
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <p class='error'>{{message}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+            
+                    <input type="submit" value="Register" class="btn">
+                </form>
+            </div>
+        </div>
+        
+    </body>
+</html
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+    <title>Smarto Assignment - Home</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="form-box">
+            <form name="transaction_form" action="{{ url_for('index') }}" method="post">
+
+                <h2>Transactions</h2>
+
+                <input type="number" name="user_id" placeholder="Account ID" class="field" required>
+        
+                <input type="submit" value="Fetch" class="btn">
+                
+            </form>
+        </div>
+        <a class='btn' href='/register/'>
+            REGISTER A CUSTOMER
+        </a>
+        <a class='btn-1' href='/transactions/new/'>
+            NEW TRANSACTION
+        </a>
+        {% if data: %}
+        <h2>{{users_involved_data[user_id]}}</h2>
+        <div class="display">
+            <table>
+                <tr>
+                    <th>Sender:</th>
+                    <th>Recipient:</th>
+                    <th>Amount:</th>
+                    <th>Details:</th>
+                    <th>Date:</th>
+                </tr>
+                {% for d in data: %}
+                <tr>
+                    <td>{{ users_involved_data[d.sender_id] }}</td>
+                    <td>{{ users_involved_data[d.receiver_id] }}</td>
+
+                    {% if user_id == d.sender_id: %}
+
+                        <td style='color: red;'>-{{ '%0.2f'| format(d.amount|float) }}</td>
+
+                    {% else: %}
+
+                        <td style = 'color: green;'>+{{ '%0.2f'| format(d.amount|float) }}</td>
+
+                    {% endif %}
+                    
+                    <td>{{ d.details }}</td>
+                    <td>{{ d.created_on.strftime('%H:%M %d-%m-%Y ') }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else: %}
+        <p>Nothing yet</p>
+        {% endif %}
+        
+    </div>
+    
+</body>
+</html>
