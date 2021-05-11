@@ -8,14 +8,14 @@ import decimal
 app = Flask(__name__)
 #bcrypt =Bcrypt(app)
 
-ENV = 'dev'
+ENV = 'prod'
 
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_user:123456789andrei@localhost/smarto'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = ''
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://aturfsphpcunbh:f79d931f0043a1a5da102dbb744a07d7fe1e1b77353fb0f310e06228bd193fe4@ec2-54-166-167-192.compute-1.amazonaws.com:5432/datfgcfvnumfit'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'secret-key-smarto'
@@ -99,11 +99,11 @@ class Account(db.Model):
         if sender and receiver:
             customer = Customer.query.filter_by(id = sender.customer_id).first()
             #if customer.check_hash(password):
-            print(customer.password_hash)
+            #print(customer.password_hash)
             if customer.password_hash == password:
                 if sender.balance > (1+fee)*amount:
                     sender.balance -= (1+fee)*amount
-                    print("$$$$$$$$$$$$$$> ",amount, (1+fee)*amount)
+                    #print("$$$$$$$$$$$$$$> ",amount, (1+fee)*amount)
                     receiver.balance += amount
                     db.session.commit()
                     return {'status' : True, 'message' : 'Success!'}
@@ -156,6 +156,7 @@ def index():
         data = Transaction.get_by_id(request.form['user_id'])
         users_involved = set()
         users_involved_data = dict()
+        customer_accounts = dict()
 
         for row in data:
             users_involved.add(Account.get_by_id(row.sender_id).customer_id)
@@ -163,6 +164,7 @@ def index():
 
         for u in users_involved:
             users_involved_data[u] = Customer.get_by_id(u).first_name + " " + Customer.get_by_id(u).last_name
+
         return render_template('index.html', user_id = int(request.form['user_id']), data = data, users_involved_data = users_involved_data)
 
 @app.route('/register/', methods = ['GET', 'POST'])
@@ -186,6 +188,8 @@ def register():
         
         else:
             db.session.add(Customer(first_name, last_name, email, password, details))
+            db.session.commit()
+            db.session.add(Account(Customer.query.filter_by(email=email).first().id, 1, 'Primary account'))
             db.session.commit()
             return redirect(url_for('index'))
 

@@ -39,8 +39,8 @@
                 </tr>
                 {% for d in data: %}
                 <tr>
-                    <td>{{ users_involved_data[d.sender_id] }}</td>
-                    <td>{{ users_involved_data[d.receiver_id] }}</td>
+                    <td>{{ users_involved_data[d.sender_id] }} {{d.sender_id}}</td>
+                    <td>{{ users_involved_data[d.receiver_id] }} {{d.receiver_id}}</td>
 
                     {% if user_id == d.sender_id: %}
 
